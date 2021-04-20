@@ -1,0 +1,247 @@
+module LED170(rst,clk,new_sw,module_led);
+	input rst,clk;
+   input [2:0] new_sw;
+   output [7:0] module_led;
+   
+   reg [10:0] a;
+   reg [7:0] led;
+	reg [14:0] counter_clk;
+	reg [9:0] counter_clk_1k;
+	reg clk_1k;
+	
+
+
+		  
+	always @(posedge clk or negedge rst) begin		//0.000,000,05 (20MHz)
+		if(!rst) begin
+			counter_clk <= 14'd0;
+		end
+		else begin
+			if(counter_clk >= 14'd10_000) begin  	//0.000,5
+				counter_clk <= 14'd0;
+				clk_1k <= ~clk_1k;					
+			end
+			else counter_clk <= counter_clk + 1'b1;
+		end
+	end
+	
+	always @(posedge clk_1k or negedge rst) begin	
+		if(!rst) begin
+			counter_clk_1k <= 10'd0;
+			led<=8'h00;
+		end
+		else begin
+			if(new_sw==~3'b001)begin
+				if(counter_clk_1k >= 10'd500) begin		// 1. sw0 up (0.5sec	)
+					counter_clk_1k <= 10'd0;
+					if (led == ~8'b01010101) led <= ~8'b10101010;
+					else led <= ~8'b01010101;
+				end
+				else counter_clk_1k <= counter_clk_1k + 1'b1;	
+			end
+			else if(new_sw==~3'b010)begin
+				if(counter_clk_1k >= 10'd1000) begin   // 2. sw1 up , sw3 down (1sec)
+					counter_clk_1k <= 10'd0;
+					if (led == 8'h00) led <= 8'd1;	
+					else led <= led <<1;
+				end
+				else counter_clk_1k <= counter_clk_1k + 1'b1;	
+			end
+			else if(new_sw==~3'b100)begin
+				if(counter_clk_1k >= 10'd1000) begin   // 3. sw2 up , sw3 down (1sec)
+					counter_clk_1k <= 10'd0;
+					if(led == 8'h00) led <= 8'b10000000;			
+					else led <= led >>1;
+				end
+				else counter_clk_1k <= counter_clk_1k + 1'b1;	
+			end
+			else if(new_sw==~3'b101)begin					// 4. sw1 up , sw3 up (1sec)  
+				if(a<=10'd8)begin
+					if(counter_clk_1k >= 10'd1000) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'd1;			
+						else led <= led <<1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd16) begin
+					if(counter_clk_1k >= 10'd900) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'd1;			
+						else led <= led <<1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd24) begin
+					if(counter_clk_1k >= 10'd800) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'd1;			
+						else led <= led <<1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd32) begin
+					if(counter_clk_1k >= 10'd700) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'd1;			
+						else led <= led <<1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd40) begin
+					if(counter_clk_1k >= 10'd600) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'd1;			
+						else led <= led <<1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd48) begin
+					if(counter_clk_1k >= 10'd500) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'd1;			
+						else led <= led <<1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd56) begin
+					if(counter_clk_1k >= 10'd400) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'd1;			
+						else led <= led <<1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd64) begin
+					if(counter_clk_1k >= 10'd300) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'd1;			
+						else led <= led <<1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd72) begin
+					if(counter_clk_1k >= 10'd200) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'd1;			
+						else led <= led <<1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd80) begin
+					if(counter_clk_1k >= 10'd100) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'd1;			
+						else led <= led <<1;
+							if(led == 8'b10000000) a <= 1'd1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+			end
+			else if(new_sw==~3'b110)begin					// 5. sw2 up , sw3 up (1sec)  
+				if(a<=10'd8)begin
+					if(counter_clk_1k >= 10'd1000) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'b10000000;			
+						else led <= led >>1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd16) begin
+					if(counter_clk_1k >= 10'd900) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'b10000000;			
+						else led <= led >>1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd24) begin
+					if(counter_clk_1k >= 10'd800) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'b10000000;			
+						else led <= led >>1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd32) begin
+					if(counter_clk_1k >= 10'd700) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'b10000000;			
+						else led <= led >>1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd40) begin
+					if(counter_clk_1k >= 10'd600) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'b10000000;			
+						else led <= led >>1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd48) begin
+					if(counter_clk_1k >= 10'd500) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'b10000000;			
+						else led <= led >>1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd56) begin
+					if(counter_clk_1k >= 10'd400) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'b10000000;			
+						else led <= led >>1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd64) begin
+					if(counter_clk_1k >= 10'd300) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'b10000000;			
+						else led <= led >>1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd72) begin
+					if(counter_clk_1k >= 10'd200) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'b10000000;			
+						else led <= led >>1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+				else if(a <= 10'd80) begin
+					if(counter_clk_1k >= 10'd100) begin			
+						counter_clk_1k <= 10'd0;
+						a <= a + 1'd1;
+						if(led == 8'd0) led <= 8'b10000000;			
+						else led <= led >>1;
+							if(led == 8'b10000000) a <= 1'd1;
+					end
+					else counter_clk_1k <= counter_clk_1k + 1'b1;
+				end
+			end
+		end
+	end
+	assign module_led=~led;
+endmodule
